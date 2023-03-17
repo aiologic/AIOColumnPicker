@@ -48,10 +48,20 @@ export default class CustomColumnPicker extends Component {
                 shouldRefreshComponent: true
             })
             this.getOptions().then(options => {
-                this.setState({
-                    columnsList: options,
-                    shouldRefreshComponent: false
-                })
+                const items = this.props.columnsToIncludeInReport.value.split(",").map(x => x.trim());
+                if(items.length > 0) {
+                    const filteredSelectedColumns = options.filter((el) => !items.includes(el));
+                    this.setState({
+                        selectedColumns: [...items],
+                        columnsList: [...filteredSelectedColumns],
+                        shouldRefreshComponent: false
+                    })
+                } else {
+                    this.setState({
+                        columnsList: options,
+                        shouldRefreshComponent: false
+                    })
+                }
             })
         }
        
