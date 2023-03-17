@@ -49,7 +49,7 @@ export default class CustomColumnPicker extends Component {
             })
             this.getOptions().then(options => {
                 const items = this.props.columnsToIncludeInReport.value.split(",").map(x => x.trim());
-                if(items.length > 0) {
+                if(this.props.columnsToIncludeInReport.value !== "*" && items.length > 0) {
                     const filteredSelectedColumns = options.filter((el) => !items.includes(el));
                     this.setState({
                         selectedColumns: [...items],
