@@ -29,7 +29,7 @@ export default class CustomColumnPicker extends Component {
         this.state = {
             selectedColumns: [],
             columnsList: [],
-            fields: { text: "" },
+            fields: { text: "label" },
             shouldRefreshComponent: false
 
         };
@@ -49,10 +49,11 @@ export default class CustomColumnPicker extends Component {
             })
             this.getOptions().then(options => {
                 const items = this.props.columnsToIncludeInReport.value.split(",").map(x => x.trim());
-                if(this.props.columnsToIncludeInReport.value !== "*" && items.length > 0) {
-                    const filteredSelectedColumns = options.filter((el) => !items.includes(el));
+                if (this.props.columnsToIncludeInReport.value !== "*" && items.length > 0) {
+                    const selectedOptions = options.filter((el) => items.includes(el.value));
+                    const filteredSelectedColumns = options.filter((el) => !items.includes(el.value));
                     this.setState({
-                        selectedColumns: [...items],
+                        selectedColumns: [...selectedOptions],
                         columnsList: [...filteredSelectedColumns],
                         shouldRefreshComponent: false
                     })
@@ -64,7 +65,7 @@ export default class CustomColumnPicker extends Component {
                 }
             })
         }
-       
+
         if (this.props.isDefault.value !== prevProps.isDefault.value) {
             if (this.props.isDefault.value === true) {
                 let options = [];
@@ -103,7 +104,11 @@ export default class CustomColumnPicker extends Component {
     }
 
     getLabelValuesOption = (obj) => {
-        return this.getAttributeValue(this.props.objIdOptions, obj);
+        const option = {
+            value: this.getAttributeValue(this.props.valueAttribute, obj),
+            label: this.getAttributeValue(this.props.displayAttribute, obj)
+        }
+        return option;
     };
 
     getAttributeValue = (attribute, obj) =>
@@ -120,7 +125,7 @@ export default class CustomColumnPicker extends Component {
                 this.setState({
                     selectedColumns: [...colunns, ...e.items],
                 })
-                this.props.columnsToIncludeInReport.setValue([...colunns, ...e.items].join(", "));
+                this.props.columnsToIncludeInReport.setValue([...colunns, ...e.items].map(x => x.value).join(", "));
                 break;
             }
             case Actions.moveAllTo: {
@@ -128,15 +133,15 @@ export default class CustomColumnPicker extends Component {
                 this.setState({
                     selectedColumns: [...colunns, ...e.items],
                 })
-                this.props.columnsToIncludeInReport.setValue([...colunns, ...e.items].join(", "));
+                this.props.columnsToIncludeInReport.setValue([...colunns, ...e.items].map(x => x.value).join(", "));
                 break;
             }
             case Actions.moveFrom: {
-                const filteredSelectedColumns = this.state.selectedColumns.filter((el) => !e.items.includes(el));
+                const filteredSelectedColumns = this.state.selectedColumns.filter((el) => !e.items.map(x => x.value).includes(el.value));
                 this.setState({
                     selectedColumns: [...filteredSelectedColumns],
                 })
-                this.props.columnsToIncludeInReport.setValue([...filteredSelectedColumns].join(", "));
+                this.props.columnsToIncludeInReport.setValue([...filteredSelectedColumns].map(x => x.value).join(", "));
                 break;
             }
             case Actions.moveAllFrom: {
@@ -191,7 +196,7 @@ export default class CustomColumnPicker extends Component {
                         </div> : <div className="dual-list-wrapper">
                             <div className="dual-list-groupa">
                                 <p>Columns to Display in Report</p>
-                                <ListBoxComponent id="combined-listbox" dataSource={this.state.columnsList} height="330px" toolbarSettings={{ items: [] }} />
+                                <ListBoxComponent id="combined-listbox" dataSource={this.state.columnsList} fields={this.state.fields} height="330px" toolbarSettings={{ items: [] }} />
                             </div>
                         </div>
                     }

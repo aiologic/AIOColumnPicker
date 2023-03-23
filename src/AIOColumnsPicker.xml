@@ -27,9 +27,16 @@
                     <caption>Data source</caption>
                     <description>Please use a microflow to retrieve. Get all the objects you want to suggest as options. The same object type as for the default value must be selected.</description>
                 </property> 
-                <property key="objIdOptions" type="attribute" required="false" dataSource="options">
-                    <caption>Object id options</caption>
-                    <description>Id attribute of the object.</description>
+                <property key="displayAttribute" type="attribute" required="false" dataSource="options">
+                    <caption>Display Attribute</caption>
+                    <description>Display attribute of the object.</description>
+                    <attributeTypes>
+                        <attributeType name="String"/>
+                    </attributeTypes>
+                </property>
+                <property key="valueAttribute" type="attribute" required="false" dataSource="options">
+                    <caption>Value Attribute</caption>
+                    <description>Value attribute of the object.</description>
                     <attributeTypes>
                         <attributeType name="String"/>
                     </attributeTypes>
@@ -56,4 +63,3 @@
         </propertyGroup> 
     </properties>
 </widget>
-
