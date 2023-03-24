@@ -49,12 +49,12 @@ export default class CustomColumnPicker extends Component {
             })
             this.getOptions().then(options => {
                 const items = this.props.columnsToIncludeInReport.value.split(",").map(x => x.trim());
-                if (this.props.columnsToIncludeInReport.value !== "*" && items.length > 0) {
+                if (items.length > 0 && items[0] !== "") {
                     const selectedOptions = options.filter((el) => items.includes(el.value));
                     const filteredSelectedColumns = options.filter((el) => !items.includes(el.value));
                     this.setState({
-                        selectedColumns: [...selectedOptions],
-                        columnsList: [...filteredSelectedColumns],
+                        selectedColumns: this.props.isDefault.value ? [] : [...selectedOptions],
+                        columnsList: this.props.isDefault.value ? [...selectedOptions] : [...filteredSelectedColumns],
                         shouldRefreshComponent: false
                     })
                 } else {
@@ -62,6 +62,7 @@ export default class CustomColumnPicker extends Component {
                         columnsList: options,
                         shouldRefreshComponent: false
                     })
+                    this.props.columnsToIncludeInReport.setValue(options.map(x => x.value).join(", "));
                 }
             })
         }
@@ -85,7 +86,7 @@ export default class CustomColumnPicker extends Component {
                         shouldRefreshComponent: false
                     })
                 }, 50)
-                this.props.columnsToIncludeInReport.setValue("*");
+                this.props.columnsToIncludeInReport.setValue(options.map(x => x.value).join(", "));
             }
         }
     }
@@ -148,7 +149,7 @@ export default class CustomColumnPicker extends Component {
                 this.setState({
                     selectedColumns: [],
                 })
-                this.props.columnsToIncludeInReport.setValue("*");
+                this.props.columnsToIncludeInReport.setValue(this.state.columnsList.map(x => x.value).join(", "));
                 break;
             }
             default: {
