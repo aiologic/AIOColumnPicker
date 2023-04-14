@@ -12,15 +12,21 @@ const Actions = {
 
 const toolbarSettings = {
     items: [
-        "moveUp",
-        "moveDown",
         "moveTo",
         "moveFrom",
         "moveAllTo",
         "moveAllFrom",
     ],
-
 };
+
+const toolbarSettings2ndColumn = {
+    items: [
+        "moveUp",
+        "moveDown",
+    ],
+};
+
+
 const noRecordsTemplate = '<div class="e-list-nrt"><span>NO DATA AVAILABLE</span></div>';
 
 export default class CustomColumnPicker extends Component {
@@ -188,16 +194,16 @@ export default class CustomColumnPicker extends Component {
                         this.props.isDefault.value === false ? <div className="dual-list-wrapper">
                             <div className="dual-list-groupa">
                                 <p>Available Columns</p>
-                                <ListBoxComponent actionComplete={this.handleChange} dataSource={this.state.columnsList} fields={this.state.fields} height="330px" scope="#combined-listbox" toolbarSettings={toolbarSettings} noRecordsTemplate={noRecordsTemplate} />
+                                <ListBoxComponent sortOrder="Ascending" filterType="Contains" allowFiltering={true} actionComplete={this.handleChange} dataSource={this.state.columnsList} fields={this.state.fields} height="330px" scope="#combined-listbox" toolbarSettings={toolbarSettings} noRecordsTemplate={noRecordsTemplate} />
                             </div>
                             <div className="dual-list-groupb">
                                 <p>Columns to Display in Report</p>
-                                <ListBoxComponent actionComplete={this.handleChange} id="combined-listbox" dataSource={this.state.selectedColumns} height="330px" fields={this.state.fields} noRecordsTemplate={noRecordsTemplate} />
+                                <ListBoxComponent sortOrder="Ascending" filterType="Contains" allowFiltering={true} actionComplete={this.handleChange} id="combined-listbox" dataSource={this.state.selectedColumns} height="330px" fields={this.state.fields} toolbarSettings={toolbarSettings2ndColumn} noRecordsTemplate={noRecordsTemplate} />
                             </div>
                         </div> : <div className="dual-list-wrapper">
                             <div className="dual-list-groupa">
                                 <p>Columns to Display in Report</p>
-                                <ListBoxComponent id="combined-listbox" dataSource={this.state.columnsList} fields={this.state.fields} height="330px" toolbarSettings={{ items: [] }} />
+                                <ListBoxComponent sortOrder="Ascending" filterType="Contains" allowFiltering={true}  id="combined-listbox" dataSource={this.state.columnsList} fields={this.state.fields} height="330px" toolbarSettings={{ items: [] }} />
                             </div>
                         </div>
                     }
